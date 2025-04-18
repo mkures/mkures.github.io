@@ -2,14 +2,18 @@
 <html>
 
 <head>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+    <title>Firebase Google Login</title>
+    <!-- Firebase SDK v8 (compatible script direct) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 
 <body>
+    <h2>Se connecter avec Google</h2>
     <button onclick="signInWithGoogle()">Login with Google</button>
 
     <script>
+        // 🔧 Remplace avec ta propre config Firebase :
         const firebaseConfig = {
             apiKey: "AIzaSyBU7kvsoEBIWFs3nvQvjsyePGQMDKz7-o8",
             authDomain: "mmc-auth-system-de791.firebaseapp.com",
@@ -20,23 +24,20 @@
         };
 
 
-        const app = firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        firebase.initializeApp(firebaseConfig);
 
         function signInWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    result.user.getIdToken().then((token) => {
-                        // Envoie le token à Appsmith via postMessage
-                        window.parent.postMessage(
-                            { type: "FIREBASE_LOGIN", token },
-                            "*"
-                        );
-                    });
+            var provider = new firebase.auth.GoogleAuthProvider();
+            firebase.auth().signInWithPopup(provider)
+                .then(function (result) {
+                    return result.user.getIdToken();
                 })
-                .catch((error) => {
-                    alert("Erreur login : " + error.message);
+                .then(function (token) {
+                    // Envoie le token à Appsmith
+                    window.parent.postMessage({ type: "FIREBASE_LOGIN", token }, "*");
+                })
+                .catch(function (error) {
+                    alert("Erreur de connexion : " + error.message);
                 });
         }
     </script>
