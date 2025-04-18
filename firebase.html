@@ -37,8 +37,9 @@
                 })
                 .then(function (token) {
                     // ✅ Envoie à Appsmith via postMessage
+                    alert("TOKEN: " + token); // 👈 affichage brut
                     window.parent.postMessage(
-                        { type: "FIREBASE_LOGIN", token: token },
+                        { type: "FIREBASE_LOGIN", token },
                         "*"
                     );
                 })
