@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth.js"></script>
+</head>
+
+<body>
+    <button onclick="signInWithGoogle()">Login with Google</button>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBU7kvsoEBIWFs3nvQvjsyePGQMDKz7-o8",
+            authDomain: "mmc-auth-system-de791.firebaseapp.com",
+            projectId: "mmc-auth-system-de791",
+            storageBucket: "mmc-auth-system-de791.firebasestorage.app",
+            messagingSenderId: "10958608405",
+            appId: "1:10958608405:web:20606a2c6c7d34e7dc961c"
+        };
+
+
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider)
+                .then((result) => {
+                    result.user.getIdToken().then((token) => {
+                        // Envoie le token à Appsmith via postMessage
+                        window.parent.postMessage(
+                            { type: "FIREBASE_LOGIN", token },
+                            "*"
+                        );
+                    });
+                })
+                .catch((error) => {
+                    alert("Erreur login : " + error.message);
+                });
+        }
+    </script>
+</body>
+
+</html>
