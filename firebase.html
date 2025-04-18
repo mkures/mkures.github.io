@@ -2,18 +2,18 @@
 <html>
 
 <head>
-    <title>Firebase Google Login</title>
-    <!-- Firebase SDK v8 (compatible script direct) -->
+    <title>Login Firebase Google</title>
+    <!-- ✅ Firebase SDK v8 : version compatible navigateur -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 </head>
 
 <body>
-    <h2>Se connecter avec Google</h2>
-    <button onclick="signInWithGoogle()">Login with Google</button>
+    <h2>Connexion via Google</h2>
+    <button onclick="signInWithGoogle()">Se connecter avec Google</button>
 
     <script>
-        // 🔧 Remplace avec ta propre config Firebase :
+        // 🔧 Remplace par ta propre config Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyBU7kvsoEBIWFs3nvQvjsyePGQMDKz7-o8",
             authDomain: "mmc-auth-system-de791.firebaseapp.com",
@@ -24,20 +24,26 @@
         };
 
 
+        // ✅ Initialisation Firebase
         firebase.initializeApp(firebaseConfig);
 
         function signInWithGoogle() {
             var provider = new firebase.auth.GoogleAuthProvider();
-            firebase.auth().signInWithPopup(provider)
+            firebase
+                .auth()
+                .signInWithPopup(provider)
                 .then(function (result) {
                     return result.user.getIdToken();
                 })
                 .then(function (token) {
-                    // Envoie le token à Appsmith
-                    window.parent.postMessage({ type: "FIREBASE_LOGIN", token }, "*");
+                    // ✅ Envoie à Appsmith via postMessage
+                    window.parent.postMessage(
+                        { type: "FIREBASE_LOGIN", token: token },
+                        "*"
+                    );
                 })
                 .catch(function (error) {
-                    alert("Erreur de connexion : " + error.message);
+                    alert("Erreur : " + error.message);
                 });
         }
     </script>
